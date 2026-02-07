@@ -82,15 +82,21 @@ export function getAllCategories(): string[] {
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
   if (!fs.existsSync(postsDirectory)) {
+    console.error(`[getPostBySlug] Directory not found: ${postsDirectory}`);
     return null;
   }
 
   const filenames = fs.readdirSync(postsDirectory).filter((f) => f.endsWith(".md"));
+  console.log(`[getPostBySlug] Found ${filenames.length} files for slug: ${slug}`);
+  
   const filename = filenames.find((f) => slugify(f) === slug);
 
   if (!filename) {
+    console.error(`[getPostBySlug] No file found for slug: ${slug}. Available:`, filenames.map(f => slugify(f)));
     return null;
   }
+  
+  console.log(`[getPostBySlug] Found file: ${filename}`);
 
   const filePath = path.join(postsDirectory, filename);
   const fileContents = fs.readFileSync(filePath, "utf8");
