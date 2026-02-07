@@ -82,21 +82,16 @@ export function getAllCategories(): string[] {
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
   if (!fs.existsSync(postsDirectory)) {
-    console.error(`[getPostBySlug] Directory not found: ${postsDirectory}`);
     return null;
   }
 
+  const decodedSlug = decodeURIComponent(slug);
   const filenames = fs.readdirSync(postsDirectory).filter((f) => f.endsWith(".md"));
-  console.log(`[getPostBySlug] Found ${filenames.length} files for slug: ${slug}`);
-  
-  const filename = filenames.find((f) => slugify(f) === slug);
+  const filename = filenames.find((f) => slugify(f) === decodedSlug);
 
   if (!filename) {
-    console.error(`[getPostBySlug] No file found for slug: ${slug}. Available:`, filenames.map(f => slugify(f)));
     return null;
   }
-  
-  console.log(`[getPostBySlug] Found file: ${filename}`);
 
   const filePath = path.join(postsDirectory, filename);
   const fileContents = fs.readFileSync(filePath, "utf8");
@@ -139,12 +134,13 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
 }
 
 export function getRelatedPosts(currentSlug: string, limit = 3): PostMeta[] {
+  const decodedSlug = decodeURIComponent(currentSlug);
   const allPosts = getAllPosts();
-  const currentPost = allPosts.find((p) => p.slug === currentSlug);
-  if (!currentPost) return allPosts.filter((p) => p.slug !== currentSlug).slice(0, limit);
+  const currentPost = allPosts.find((p) => p.slug === decodedSlug);
+  if (!currentPost) return allPosts.filter((p) => p.slug !== decodedSlug).slice(0, limit);
 
   const scored = allPosts
-    .filter((p) => p.slug !== currentSlug)
+    .filter((p) => p.slug !== decodedSlug)
     .map((post) => {
       let score = 0;
       post.tags.forEach((tag) => {
