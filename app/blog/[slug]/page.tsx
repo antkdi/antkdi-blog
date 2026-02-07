@@ -14,12 +14,12 @@ interface PageProps {
 
 export async function generateStaticParams() {
   const slugs = getAllSlugs();
-  return slugs.map((slug) => ({ slug: encodeURIComponent(slug) }));
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getPostBySlug(decodeURIComponent(slug));
+  const post = await getPostBySlug(slug);
   if (!post) return { title: "Post Not Found" };
 
   return {
@@ -42,8 +42,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function PostPage({ params }: PageProps) {
-  const { slug: rawSlug } = await params;
-  const slug = decodeURIComponent(rawSlug);
+  const { slug } = await params;
   const post = await getPostBySlug(slug);
 
   if (!post) {
