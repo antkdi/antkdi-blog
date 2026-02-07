@@ -16,7 +16,7 @@ export function PostCard({ post, featured = false }: PostCardProps) {
   });
 
   return (
-    <Link href={`/blog/${post.slug}`} className="group block">
+    <Link href={`/blog/${post.slug}/`} className="group block">
       <article
         className={`relative overflow-hidden rounded-xl border border-border/50 bg-card/50 p-6 backdrop-blur-sm transition-all duration-300 hover:border-blue-500/30 hover:bg-card hover:shadow-lg hover:shadow-blue-500/5 ${
           featured ? "sm:p-8" : ""

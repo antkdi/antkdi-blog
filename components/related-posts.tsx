@@ -17,7 +17,7 @@ export function RelatedPosts({ posts }: RelatedPostsProps) {
         {posts.map((post) => (
           <Link
             key={post.slug}
-            href={`/blog/${post.slug}`}
+            href={`/blog/${post.slug}/`}
             className="group block rounded-lg p-2 transition-colors hover:bg-accent"
           >
             <h4 className="line-clamp-2 text-xs font-medium transition-colors group-hover:text-blue-500">
